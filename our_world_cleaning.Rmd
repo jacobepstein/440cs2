@@ -6,7 +6,9 @@ output: html_document
 ---
 
 ```{r}
-
-
+share_infected = read.csv("share-of-population-infected-with-hiv-ihme.csv")
+total_cases = read.csv("deaths-and-new-cases-of-hiv.csv")
+hiv_merged = merge(share_infected, total_cases, by = c("Code", "Year"))
+write.csv(hiv_merged, "our_world.csv")
 ```
 
