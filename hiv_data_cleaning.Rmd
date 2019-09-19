@@ -7,18 +7,30 @@ output: html_document
 
 ```{r}
 library(dplyr)
-library(varhandle)
+library(stringr)
+
 hiv = read.csv("hiv_data.csv", stringsAsFactors = FALSE)
 hiv = hiv %>%
   select(-X)
 
-hiv[hiv=="..."] = NA
-# 
-# fun = function(x){
-#   unfactor(x) %>%
-# }
-# 
-# hiv[,4:length(hiv)] <- sapply(hiv[,4:length(hiv)], fun)
 
+for (j in 4:length(hiv)){
+  for (i in 1:nrow(hiv)){
+    entry = hiv[i,j]
+    if (entry == "..."){
+      hiv[i,j] = NA
+      next
+    }
+    if (str_count(entry, "<") != 0) {
+      hiv[i, j] = 0
+    }
+    else {
+      hiv[i,j] = as.numeric(entry)
+    }
+  }
+}
+
+
+saveRDS(hiv, "hiv.rdata")
 
 ```
