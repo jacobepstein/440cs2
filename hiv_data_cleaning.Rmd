@@ -30,7 +30,8 @@ for (j in 4:length(hiv)){
   }
 }
 
+hiv = hiv %>%
+  filter(Country.Code != "")
 
-saveRDS(hiv, "hiv.rdata")
-
+write.csv(hiv, file = "hiv.csv")
 ```
