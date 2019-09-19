@@ -8,6 +8,8 @@ output: html_document
 ```{r}
 library(dplyr)
 library(stringr)
+library(shiny)
+library(shinythemes)
 
 hiv = read.csv("hiv_data.csv", stringsAsFactors = FALSE)
 hiv = hiv %>%
@@ -34,4 +36,41 @@ hiv = hiv %>%
   filter(Country.Code != "")
 
 write.csv(hiv, file = "hiv.csv")
+```
+=======
+saveRDS(hiv, "hiv.rdata")
+```
+
+Add country data and merge with 2018 data
+```{r}
+country_data = read.csv("countrydata.csv", stringsAsFactors = FALSE)
+country_data = country_data %>% mutate(Country = str_trim(Country, side = c("both")))
+country_variables = 
+hiv_2018 = hiv %>%
+  filter(Year == 2018) %>% 
+  mutate(Country = str_trim(Country, side = c("both")))
+country_data = inner_join(country_data, hiv_2018, by = "Country")
+```
+
+
+```{r, spotify shiny}
+shinyApp(
+  ui = fluidPage(
+    titlePanel("HIV Analysis"),
+    theme = shinytheme("flatly"),
+    sidebarLayout(
+      sidebarPanel = sidebarPanel(
+      selectInput(inputId = "country",
+                  label = "Select Country:",
+                  choices = country_data['Country'],
+      hr()), 
+      selectInput(inputId = "selector",
+                  label = "Select Variable:",
+                  choices = c("Population", "Birth Rate", "Death Rate"),
+      hr())),
+      mainPanel = mainPanel("The scatterplot"))), 
+  server = function(input, output, session){
+    state = reactiveValues(
+      is_error = F
+    )})
 ```
