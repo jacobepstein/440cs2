@@ -1,0 +1,24 @@
+---
+title: "hiv_data_cleaning"
+author: "Jake Epstein"
+date: "9/19/2019"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(varhandle)
+hiv = read.csv("hiv_data.csv", stringsAsFactors = FALSE)
+hiv = hiv %>%
+  select(-X)
+
+hiv[hiv=="..."] = NA
+# 
+# fun = function(x){
+#   unfactor(x) %>%
+# }
+# 
+# hiv[,4:length(hiv)] <- sapply(hiv[,4:length(hiv)], fun)
+
+
+```
