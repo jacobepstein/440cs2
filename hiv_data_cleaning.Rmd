@@ -11,7 +11,7 @@ library(stringr)
 library(shiny)
 library(shinythemes)
 
-hiv = read.csv("hiv_data.csv", stringsAsFactors = FALSE)
+hiv = read.csv("Archive/hiv_data.csv", stringsAsFactors = FALSE)
 hiv = hiv %>%
   select(-X)
 
@@ -36,10 +36,10 @@ hiv = hiv %>%
   filter(Country.Code != "")
 
 write.csv(hiv, file = "hiv.csv")
-```
-=======
 saveRDS(hiv, "hiv.rdata")
 ```
+
+
 
 Add country data and merge with 2018 data
 ```{r}

@@ -769,8 +769,8 @@
         <devicelayout auto-generated='true' name='Phone'>
           <size maxheight='1000' minheight='1000' sizing-mode='vscroll' />
           <zones>
-            <zone h='100000' id='31' type='layout-basic' w='100000' x='0' y='0'>
-              <zone h='98000' id='32' param='vert' type='layout-flow' w='98666' x='667' y='1000'>
+            <zone h='100000' id='33' type='layout-basic' w='100000' x='0' y='0'>
+              <zone h='98000' id='34' param='vert' type='layout-flow' w='98666' x='667' y='1000'>
                 <zone fixed-size='280' h='98000' id='3' is-fixed='true' name='AIDS Metrics Over Time' w='43113' x='667' y='1000'>
                   <zone-style>
                     <format attr='border-color' value='#000000' />
@@ -830,7 +830,7 @@
       <simple-id uuid='{76658FB9-9EB8-48C2-9343-FBA5FECE60CA}' />
     </dashboard>
   </dashboards>
-  <windows pres-mode='true' source-height='30'>
+  <windows source-height='30'>
     <window class='worksheet' name='AIDS Deaths by Country'>
       <cards>
         <edge name='left'>
