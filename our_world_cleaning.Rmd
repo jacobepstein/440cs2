@@ -1,0 +1,15 @@
+---
+title: "Our_world_in_data_cleaning"
+author: "Jake Epstein"
+date: "9/19/2019"
+output: html_document
+---
+
+```{r}
+share_infected = read.csv("share-of-population-infected-with-hiv-ihme.csv")
+total_cases = read.csv("deaths-and-new-cases-of-hiv.csv")
+hiv_merged = merge(share_infected, total_cases, by = c("Code", "Year"))
+hiv_merged$Number.of.people.living.with.HIV..x10...tens.of.people.living.with.HIV. = hiv_merged$Number.of.people.living.with.HIV..x10...tens.of.people.living.with.HIV. * 10
+write.csv(hiv_merged, "our_world.csv")
+```
+
