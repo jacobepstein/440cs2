@@ -10,6 +10,7 @@ library(dplyr)
 library(stringr)
 library(shiny)
 library(shinythemes)
+library(ggplot2)
 
 hiv = read.csv("hiv_data.csv", stringsAsFactors = FALSE)
 hiv = hiv %>%
@@ -40,7 +41,8 @@ Add country data and merge with 2018 data
 ```{r}
 country_data = read.csv("countrydata.csv", stringsAsFactors = FALSE)
 country_data = country_data %>% mutate(Country = str_trim(Country, side = c("both")))
-country_variables = 
+country_data = country_data %>% rename(SquareArea = Area..sq..mi.., PopulationDensity = Pop..Density..per.sq..mi.., CoastlineRatio = Coastline..coast.area.ratio., NetMigration = Net.migration, InfantMortality = Infant.mortality..per.1000.births., GDPperCapita = GDP....per.capita., Literacy = Literacy...., PhoneOwnership = Phones..per.1000., Arable = Arable...., Crops = Crops...., Other = Other....)
+country_variables = colnames(country_data)
 hiv_2018 = hiv %>%
   filter(Year == 2018) %>% 
   mutate(Country = str_trim(Country, side = c("both")))
@@ -52,20 +54,16 @@ country_data = inner_join(country_data, hiv_2018, by = "Country")
 shinyApp(
   ui = fluidPage(
     titlePanel("HIV Analysis"),
-    theme = shinytheme("flatly"),
+    theme = shinytheme("darkly"),
     sidebarLayout(
       sidebarPanel = sidebarPanel(
-      selectInput(inputId = "country",
-                  label = "Select Country:",
-                  choices = country_data['Country'],
-      hr()), 
       selectInput(inputId = "selector",
                   label = "Select Variable:",
-                  choices = c("Population", "Birth Rate", "Death Rate"),
+                  choices = country_variables[3:length(country_variables)],
       hr())),
-      mainPanel = mainPanel("The scatterplot"))), 
+      mainPanel = mainPanel(plotOutput(outputId = "scatter")))), 
   server = function(input, output, session){
-    state = reactiveValues(
-      is_error = F
-    )})
+    #output$scatter = renderPlot({ggplot(country_data, aes(x=numeric(input$selector), y=All.ages.incidence.rate..per.1000.)) + geom_point()})
+    tableOutput
+      })
 ```
