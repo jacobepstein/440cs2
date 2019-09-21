@@ -1,0 +1,49 @@
+---
+title: "HIV Visualization"
+author: "Daniel Spottiswood"
+date: "9/21/2019"
+output: html_document
+---
+
+Add country data and merge with 2018 data
+```{r}
+hiv_data = read.csv("our_world.csv", stringsAsFactors = FALSE)
+country_data = read.csv("countrydata.csv", stringsAsFactors = FALSE, dec = ",")
+country_data = country_data %>% mutate(Country = str_trim(Country, side = c("both")))
+country_data = country_data %>% rename(SquareArea = Area..sq..mi.., PopulationDensity = Pop..Density..per.sq..mi.., CoastlineRatio = Coastline..coast.area.ratio., NetMigration = Net.migration, InfantMortality = Infant.mortality..per.1000.births., GDPperCapita = GDP....per.capita., Literacy = Literacy...., PhoneOwnership = Phones..per.1000., Arable = Arable...., Crops = Crops...., Other = Other....) 
+country_variables = colnames(country_data)
+hiv_data_2017 = hiv_data %>%
+  filter(Year == 2017) %>% 
+  mutate(Country = str_trim(Entity.x, side = c("both"))) %>%
+  rename(Deaths = Deaths.from.HIV.AIDS..Number., NewInfections =  New.infections.of.HIV.AIDS..new.cases.of.HIV.infection., CurrentlyInfected = Number.of.people.living.with.HIV..x10...tens.of.people.living.with.HIV.)
+country_data = inner_join(country_data, hiv_data_2017, by = "Country")
+```
+
+
+```{r}
+options(scipen=10000)
+
+shinyApp(
+  ui = fluidPage(
+    titlePanel("HIV Analysis"),
+    theme = shinytheme("flatly"),
+    sidebarLayout(
+      sidebarPanel = sidebarPanel(
+      selectInput(inputId = "selector",
+                  label = "Select Variable:",
+                  choices = country_variables[4:length(country_variables)],
+      hr()),
+      selectInput(inputId = "outcome",
+                  label = "Select Metric:",
+                  choices = c("Deaths", "NewInfections", "CurrentlyInfected"),
+      hr())),
+      mainPanel = mainPanel(plotOutput("scatter")))), 
+  server = function(input, output){
+     output$scatter = renderPlot({
+       x = country_data[[input$selector]]
+       y = country_data[[input$outcome]]
+       ggplot(data = country_data, aes(x= x, y=y, na.rm = TRUE))+ geom_point(aes(colour = factor(country_data$Region), size=Population)) + ylab(input$outcome) + xlab(input$selector) + geom_smooth(method='lm',formula=y~x) + labs(color="Region")
+       })
+      }
+  )
+```
