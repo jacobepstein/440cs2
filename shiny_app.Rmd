@@ -21,6 +21,7 @@ country_data = inner_join(country_data, hiv_data_2017, by = "Country")
 
 
 ```{r}
+library(ggplot2)
 options(scipen=10000)
 
 shinyApp(
@@ -36,14 +37,32 @@ shinyApp(
       selectInput(inputId = "outcome",
                   label = "Select Metric:",
                   choices = c("Deaths", "NewInfections", "CurrentlyInfected"),
-      hr())),
+      hr()),
+      actionButton("action", "Generate Plot")),
       mainPanel = mainPanel(plotOutput("scatter")))), 
+  
   server = function(input, output){
+     state = reactiveValues(
+      observers = list()
+    )
+    
+    #when actionbutton is clicked
+    observeEvent({
+      input$action
+      }, {
+      # Destroy existing observers
+      for(i in seq_along(state$observers)) {
+        state$observers[[i]]$destroy()
+
+      }
+        
      output$scatter = renderPlot({
        x = country_data[[input$selector]]
        y = country_data[[input$outcome]]
        ggplot(data = country_data, aes(x= x, y=y, na.rm = TRUE))+ geom_point(aes(colour = factor(country_data$Region), size=Population)) + ylab(input$outcome) + xlab(input$selector) + geom_smooth(method='lm',formula=y~x) + labs(color="Region")
        })
       }
+    }
   )
+)
 ```
