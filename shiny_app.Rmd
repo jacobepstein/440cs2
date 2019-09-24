@@ -3,6 +3,7 @@ title: "HIV Visualization"
 author: "Daniel Spottiswood"
 date: "9/21/2019"
 output: html_document
+runtime: shiny
 ---
 
 Add country data and merge with 2018 data
@@ -31,7 +32,7 @@ options(scipen=10000)
 shinyApp(
   ui = fluidPage(
     titlePanel("HIV Analysis"),
-    theme = shinytheme("flatly"),
+    theme = shinytheme("yeti"),
     sidebarLayout(
       sidebarPanel = sidebarPanel(
       selectInput(inputId = "selector",
@@ -47,8 +48,10 @@ shinyApp(
                          choices = c(regions),
     
       hr()),
-      actionButton("action", "Generate Plot")),
-      mainPanel = mainPanel(plotOutput("scatter")))), 
+      actionButton("action", "Generate Plot"), 
+      downloadButton("downloadData", "Download")),
+      mainPanel = mainPanel(tabsetPanel(tabPanel(title = "Visualization", plotOutput("scatter")),   tabPanel(title = "Data",dataTableOutput(outputId = "table")
+          ))))), 
   
   server = function(input, output){
      state = reactiveValues(
@@ -63,10 +66,10 @@ shinyApp(
       for(i in seq_along(state$observers)) {
         state$observers[[i]]$destroy()
       }
-
-     output$scatter = renderPlot({
-       regionset = country_data %>%
+      regionset = country_data %>%
          filter(Region %in% input$region)
+  
+     output$scatter = renderPlot({
        x = regionset[[input$selector]]
        y = regionset[[input$outcome]]
        
@@ -74,9 +77,22 @@ shinyApp(
          ggplot(data = country_data) + ylab(input$outcome) + xlab(input$selector) + geom_blank(show.legend = FALSE) + ggtitle("Please select region(s)")
        }
        else{
-         ggplot(data = regionset, aes(x= x, y=y, na.rm = TRUE))+ geom_point(aes(colour = factor(regionset$Region), size=Population)) + ylab(input$outcome) + xlab(input$selector) + geom_smooth(method='lm',formula=y~x) + labs(color="Region") + ggtitle(paste(paste(input$outcome, " VS "), input$selector))
+         ggplot(data = regionset, aes(x= x, y=y, na.rm = TRUE))+ geom_point(aes(colour = factor(regionset$Region), size=Population)) + ylab(input$outcome) + xlab(input$selector) + geom_smooth(method='lm',formula=y~x) + labs(color="Region") + ggtitle(paste(paste(input$outcome, " VS "), input$selector)) + theme_minimal()
        }
        })
+     
+    output$table =renderDataTable({
+    regionset %>% select(Country, Region, input$selector, input$outcome)
+    })
+    
+    output$downloadData <- downloadHandler(
+    filename = function() {
+      paste("hiv_data_", input$selector, "vs", input$outcome, ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(regionset, file, row.names = FALSE)
+    }
+  )
 
       }
     )
