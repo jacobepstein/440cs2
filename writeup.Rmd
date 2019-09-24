@@ -14,11 +14,13 @@ We took our data from https://ourworldindata.org/hiv-aids. Our World in Data is 
 ### Story
 
 We chose to look into the story of HIV/AIDS around the world over the years. We found a few findings of interest:
-1) AIDS is much more prevalent in sub-Saharan Africa than in any other part of the world, and most AIDS deaths happen there.
-2) Specifically, South Africa has the most AIDS deaths and has one of the highest prevalences among all countries.
-3) AIDS deaths peaked around 2005 and have since been on the decline. However, the number of people living with AIDS has steadily increased. This implies that treatment of AIDS has gotten better and it is no longer the short death sentence it once was.
-4) New instances of AIDS over time have decreased since the turn of the millenia.
-5) In sub-Saharan Africa, the square Area of a country is correlated with the amount of new infections and AIDS deaths in that country.
+
+1. AIDS is much more prevalent in sub-Saharan Africa than in any other part of the world, and most AIDS deaths happen there.
+2. Specifically, South Africa has the most AIDS deaths and has one of the highest prevalences among all countries.
+3. AIDS deaths peaked around 2005 and have since been on the decline. However, the number of people living with AIDS has steadily increased. This implies that treatment of AIDS has gotten better and it is no longer the short death sentence it once was.
+4. New instances of AIDS over time have decreased since the turn of the millenia.
+5. In sub-Saharan Africa, the square Area of a country is correlated with the amount of new infections and AIDS deaths in that country.
+6. There has been a large increase in AIDS deaths and new infections in Eastern Europe, specifically Russia and Ukraine, in recent years (~2005-present).
 
 <br>
 <br>
