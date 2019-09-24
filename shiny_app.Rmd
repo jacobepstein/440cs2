@@ -7,11 +7,14 @@ output: html_document
 
 Add country data and merge with 2018 data
 ```{r}
+library(dplyr)
+library(stringr)
 hiv_data = read.csv("our_world.csv", stringsAsFactors = FALSE)
 country_data = read.csv("countrydata.csv", stringsAsFactors = FALSE, dec = ",")
 country_data = country_data %>% mutate(Country = str_trim(Country, side = c("both")))
 country_data = country_data %>% rename(SquareArea = Area..sq..mi.., PopulationDensity = Pop..Density..per.sq..mi.., CoastlineRatio = Coastline..coast.area.ratio., NetMigration = Net.migration, InfantMortality = Infant.mortality..per.1000.births., GDPperCapita = GDP....per.capita., Literacy = Literacy...., PhoneOwnership = Phones..per.1000., Arable = Arable...., Crops = Crops...., Other = Other....) 
 country_variables = colnames(country_data)
+regions = unique(country_data$Region)
 hiv_data_2017 = hiv_data %>%
   filter(Year == 2017) %>% 
   mutate(Country = str_trim(Entity.x, side = c("both"))) %>%
@@ -21,9 +24,11 @@ country_data = inner_join(country_data, hiv_data_2017, by = "Country")
 
 
 ```{r}
-library(ggplot2)
-options(scipen=10000)
 
+library(ggplot2)
+library(shiny)
+library(shinythemes)
+options(scipen=10000)
 shinyApp(
   ui = fluidPage(
     titlePanel("HIV Analysis"),
@@ -37,6 +42,11 @@ shinyApp(
       selectInput(inputId = "outcome",
                   label = "Select Metric:",
                   choices = c("Deaths", "NewInfections", "CurrentlyInfected"),
+      hr()),
+      checkboxGroupInput(inputId = "region", 
+                         label = "Select Region(s):", 
+                         choices = c(regions),
+    
       hr()),
       actionButton("action", "Generate Plot")),
       mainPanel = mainPanel(plotOutput("scatter")))), 
@@ -53,16 +63,24 @@ shinyApp(
       # Destroy existing observers
       for(i in seq_along(state$observers)) {
         state$observers[[i]]$destroy()
+      }
+
+     output$scatter = renderPlot({
+       regionset = country_data %>%
+         filter(Region %in% input$region)
+       x = regionset[[input$selector]]
+       y = regionset[[input$outcome]]
+       
+       if(nrow(regionset)==0){
+         ggplot(data = country_data) + ylab(input$outcome) + xlab(input$selector) + geom_blank(show.legend = FALSE) + ggtitle("Please select region(s)")
+       }
+       else{
+         ggplot(data = regionset, aes(x= x, y=y, na.rm = TRUE))+ geom_point(aes(colour = factor(regionset$Region), size=Population)) + ylab(input$outcome) + xlab(input$selector) + geom_smooth(method='lm',formula=y~x) + labs(color="Region") + ggtitle(paste(paste(input$outcome, " VS "), input$selector))
+       }
+       })
 
       }
-        
-     output$scatter = renderPlot({
-       x = country_data[[input$selector]]
-       y = country_data[[input$outcome]]
-       ggplot(data = country_data, aes(x= x, y=y, na.rm = TRUE))+ geom_point(aes(colour = factor(country_data$Region), size=Population)) + ylab(input$outcome) + xlab(input$selector) + geom_smooth(method='lm',formula=y~x) + labs(color="Region")
-       })
-      }
-    }
-  )
+    )
+  }
 )
 ```
