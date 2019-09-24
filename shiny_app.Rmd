@@ -24,7 +24,6 @@ country_data = inner_join(country_data, hiv_data_2017, by = "Country")
 
 
 ```{r}
-
 library(ggplot2)
 library(shiny)
 library(shinythemes)
