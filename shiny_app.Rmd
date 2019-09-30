@@ -64,7 +64,8 @@ shinyApp(
       actionButton("action", "Generate Plot"), 
       downloadButton("downloadData", "Download")),
       mainPanel = mainPanel(
-        tabsetPanel(tabPanel(title = "Visualization", plotOutput("scatter")),  
+        tabsetPanel(tabPanel(title = "Visualization", plotOutput("scatter")), 
+                    tabPanel(title = "Top 10 Countries", plotOutput("bar")),
                     tabPanel(title = "Data",dataTableOutput(outputId = "table")
           ))))), 
   
@@ -85,9 +86,9 @@ shinyApp(
       regionset = country_data %>%
          filter(Region %in% input$region)
   
-     output$scatter = renderPlot({
-       x = regionset[[input$selector]]
-       y = regionset[[input$outcome]]
+      output$scatter = renderPlot({
+         x = regionset[[input$selector]]
+         y = regionset[[input$outcome]]
        
        if(nrow(regionset)==0){
          ggplot(data = country_data) +
@@ -105,6 +106,34 @@ shinyApp(
            labs(color="Region") +
            ggtitle(paste(paste(input$outcome, " VS "), input$selector)) +
            theme_minimal()
+         }
+      })
+     
+    output$bar = renderPlot({
+       
+    top10 =  regionset %>%
+          top_n(10, input$outcome)
+    
+    a = top10[["Country"]]
+    b = top10[[input$outcome]]
+       
+     if(nrow(top10)==0){
+         ggplot(data = country_data) +
+           ylab(input$outcome) +
+           xlab(input$selector) + 
+           geom_blank(show.legend = FALSE) + 
+           ggtitle("Please select region(s)")
+         
+        } else {
+
+          ggplot(data=top10, aes(reorder(a, -b), b, na.rm = TRUE))+
+            ylab(input$outcome) +
+            xlab("Country") +
+            geom_bar(stat="identity", aes(fill = factor(top10$Region))) +
+            labs(fill ="Region") +
+            ggtitle(paste("Top 10 Countries for", input$outcome)) +
+            theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5)) +
+            theme_minimal()
          }
       })
      
