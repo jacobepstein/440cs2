@@ -112,7 +112,7 @@ shinyApp(
     output$bar = renderPlot({
        
     top10 =  regionset %>%
-          top_n(10, input$outcome)
+          top_n(10, select(regionset, input$outcome))
     
     a = top10[["Country"]]
     b = top10[[input$outcome]]
@@ -132,8 +132,8 @@ shinyApp(
             geom_bar(stat="identity", aes(fill = factor(top10$Region))) +
             labs(fill ="Region") +
             ggtitle(paste("Top 10 Countries for", input$outcome)) +
-            theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5)) +
-            theme_minimal()
+            theme_minimal() +
+            theme(axis.text.x=element_text(angle=45,size = 10,vjust=0.5))
          }
       })
      
