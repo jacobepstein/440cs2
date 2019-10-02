@@ -39,7 +39,7 @@ Our RShiny app is an interactive platform used to explore the relationship betwe
 1. A country's squared area has a significant positive correlation with new infections, current infections, and deaths. 
 2. Infant mortality has a significant positive correlation with new infections, current infections, and deaths. A one unit increase in infant mortality is associated with 200 new infections.
 3. GDP per Capita has a negative correlation with deaths and infection rates.
-4. In Sub-Saharan Africa we interestingly see a poisitive correlation between literacy rate and current infections.
+4. In Sub-Saharan Africa we interestingly see a poisitive correlation between literacy rate and current infections. This counterintuitive result is likely due to high HIV/AIDS rates in South Africa and Nigeria, two relatively literate countries.
 
 <br>
 <br>
@@ -53,7 +53,9 @@ Global Burden of Disease Collaborative Network. Global Burden of Disease Study 2
 World Bank – World Development Indicators. http://data.worldbank.org/data-catalog/world-development-indicators
 
 
+### Teamwork Report
 
+Everyone on the team contributed to the project, so we'd like to divide the points equally.
 
 
 
