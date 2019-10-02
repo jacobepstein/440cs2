@@ -64,8 +64,8 @@ shinyApp(
       actionButton("action", "Generate Plot"), 
       downloadButton("downloadData", "Download")),
       mainPanel = mainPanel(
-        tabsetPanel(tabPanel(title = "Visualization", plotOutput("scatter")), 
-                    tabPanel(title = "Top 10 Countries", plotOutput("bar")),
+        tabsetPanel(tabPanel(title = "Visualization", plotOutput("scatter"), textOutput("interpretation")), 
+                    tabPanel(title = "Top 10 Countries", plotOutput("bar"), plotOutput("bar_selector")),
                     tabPanel(title = "Data",dataTableOutput(outputId = "table")
           ))))), 
   
@@ -108,12 +108,24 @@ shinyApp(
            theme_minimal()
          }
       })
+      
+    output$interpretation = renderText({
+      regression = lm((regionset %>% select(input$outcome) 
+                        %>% unlist()) ~ (regionset %>% select(input$selector) %>% unlist()))
+      coef = summary(regression)$coefficients[2,1]
+      p_value = summary(regression)$coefficients[2,4]
+      if(p_value < .05){
+        paste("We see a significant linear relationship between ", input$selector, " and ",input$outcome, " for the regions selected. A one unit increase in ", input$selector, " is associated with a change in ", input$outcome, " of ", signif(coef,digits = 2), " units for these regions. This is statistically significant at a p-value of ", signif(p_value,digits = 2), ".")
+      }
+      else{
+        paste("Fitting a linear regression, we see a one unit increase in ", input$selector, " is associated with a change in ", input$outcome, " of ", signif(coef,digits = 2), " units for these regions. However, this relationship is not statistically significant with a p-value of ", signif(p_value,digits = 2), ".")
+      }
+    })
      
     output$bar = renderPlot({
        
     top10 =  regionset %>%
           top_n(10, select(regionset, input$outcome))
-    
     a = top10[["Country"]]
     b = top10[[input$outcome]]
        
@@ -136,7 +148,34 @@ shinyApp(
             theme(axis.text.x=element_text(angle=45,size = 10,vjust=0.5))
          }
       })
-     
+    
+    output$bar_selector = renderPlot({
+       
+    top10 =  regionset %>%
+          top_n(10, select(regionset, input$selector))
+    a = top10[["Country"]]
+    b = top10[[input$selector]]
+       
+     if(nrow(top10)==0){
+         ggplot(data = country_data) +
+           ylab(input$selector) +
+           xlab("Country") + 
+           geom_blank(show.legend = FALSE) + 
+           ggtitle("Please select region(s)")
+         
+        } else {
+
+          ggplot(data=top10, aes(reorder(a, -b), b, na.rm = TRUE))+
+            ylab(input$selector) +
+            xlab("Country") +
+            geom_bar(stat="identity", aes(fill = factor(top10$Region))) +
+            labs(fill ="Region") +
+            ggtitle(paste("Top 10 Countries for", input$selector)) +
+            theme_minimal() +
+            theme(axis.text.x=element_text(angle=45,size = 10,vjust=0.5))
+         }
+      })
+    
     output$table =renderDataTable({
     regionset %>% select(Country, Region, input$selector, input$outcome)
     })
