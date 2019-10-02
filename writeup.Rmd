@@ -4,6 +4,13 @@ subtitle: "Group 8: Jake Epstein, Daniel Spottiswood, Michael Tan, Sahil Patel, 
 output: pdf_document
 ---
 
+### Introduction
+
+For this case study, we chose to explore HIV/AIDS. Our study had two goals: to visualize the scale of the HIV/AIDS epidemic across countries and time, and to create a platform for exploring the relationship between HIV/AIDS and various other country characteristics. We created a Tableau dashboard to accomplish the first goal and an interactive RShiny app to address the second.
+
+<br>
+<br>
+
 ### Data
 
 We took our data from https://ourworldindata.org/hiv-aids. Our World in Data is an organization based at the University of Oxford dedicated to using research and data to make progress against the world’s largest problems. They have been cited in research and media sources such as Science Magazine, The New York Times, and the Royal Statistical Society. The dataset that Our World in Data constructed in turn drew from data from the World Bank, the Global Burden of Disease Collaborate Network, and the Institute for Health Metrics and Evaluation. A formal works cited section is below.
@@ -11,23 +18,31 @@ We took our data from https://ourworldindata.org/hiv-aids. Our World in Data is 
 <br>
 <br>
 
-### Story
+### Tableau Dashboard
 
-We chose to look into the story of HIV/AIDS around the world over the years. We found a few findings of interest:
+Our Tableau dashboard is used to visualize HIV/AIDS metrics from 1990 - 2017 across 195 countries. We plot the trends for three different HIV/AIDS metrics over time: number of deaths due to HIV/AIDS, number of new infections and number of people living with HIV/AIDS. We also created a bubble map which shows cumulative number of deaths, indicated by the size of the bubble for each country, as well as adult prevalence rate, which is shown by the color of the bubble. Some conclusions are shown below:
 
-1. AIDS is much more prevalent in sub-Saharan Africa than in any other part of the world, and most AIDS deaths happen there.
-2. Specifically, South Africa has the most AIDS deaths and has one of the highest prevalences among all countries.
-3. AIDS deaths peaked around 2005 and have since been on the decline. However, the number of people living with AIDS has steadily increased. This implies that treatment of AIDS has gotten better and it is no longer the short death sentence it once was.
-4. New instances of AIDS over time have decreased since the turn of the millenia.
-5. In sub-Saharan Africa, the square Area of a country is correlated with the amount of new infections and AIDS deaths in that country.
-6. There has been a large increase in AIDS deaths and new infections in Eastern Europe, specifically Russia and Ukraine, in recent years (~2005-present).
+1. HIV/AIDS is much more prevalent in sub-Saharan Africa than in any other part of the world.
+2. South Africa and Nigeria have had the most deaths attributable to HIV/AIDS, of around 4 million each, and Zimbabwe has the highest adult prevalence of nearly 20%.
+3. HIV/AIDS deaths peaked around 2005 and have since been on the decline. However, the number of people living with HIV/AIDS has steadily increased. This implies that treatment of HIV/AIDS has gotten better and it is no longer the short death sentence it once was.
+4. New instances of HIV/AIDS over time have decreased since the turn of the millennium, but there are still around 2 million new instances per year.
+5. There has been a large increase in HIV/AIDS deaths and new infections in Eastern Europe, specifically Russia and Ukraine, in recent years (~2005-present). Much of this can likely be contributed to economic downturn and the rise of drug use and needle sharing.
+6. Similarly, South America has seen a large increase in HIV/AIDS cases, with Brazil being the most affected South American Country.
 
+<br>
+<br>
+
+### RShiny App
+
+Our RShiny app is an interactive platform used to explore the relationship between country characteristics and HIV/AIDS metrics. The target audience for this app is someone interested in HIV/AIDS who does not necessarily have a very strong background in statistics, such as a global health professional, so our goal was to keep the output informative, yet simple and understandable The app itself is composed of three tabs. The first tab is used to visualize the relationship between a characteristic and an HIV/AIDS metric. The output of this tab includes a scatterplot and a brief interpretation of the strength of the linear relationship between the two variables. The second tab identifies the top 10 countries for a particular metric, and the final tab is a data viewer. The user also has the ability to filter data by region and download selected data from the app using the download button. Some selected conclusions are shown below:
+
+1. [insert conclusions here]
 <br>
 <br>
 
 ### Works Cited
 
-Roser, M., & Ritchie, H. (2018, April 3). HIV / AIDS. Retrieved from https://ourworldindata.org/hiv-aids
+Roser, M., & Ritchie, H. (2018, April 3). HIV / HIV/AIDS. Retrieved from https://ourworldindata.org/hiv-aids
 
 Global Burden of Disease Collaborative Network. Global Burden of Disease Study 2017 (GBD 2017) Results. Seattle, United States: Institute for Health Metrics and Evaluation (IHME), 2018.
 
